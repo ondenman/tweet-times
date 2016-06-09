@@ -1,7 +1,7 @@
 {
-  "name": "tweet-counter",
+  "name": "tweet-times",
   "version": "1.0.0",
-  "description": "Counts total occurrences of search terms in a twitter stream",
+  "description": "Opens stream of tweets containing specified terms. Records date of tweets.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
