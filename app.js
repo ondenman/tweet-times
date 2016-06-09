@@ -63,6 +63,6 @@ function run() {
     }, runningTime)
 }
 
-const FILE = './tweet_times.txt'
-const RUNNING_TIME = 1000 * 2 // running time in milliseconds
+const FILE = './tweet_times.json'
+const RUNNING_TIME = 1000 * 5 // running time in milliseconds
 run()
