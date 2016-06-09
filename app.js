@@ -2,12 +2,13 @@
 
 const Twitter = require('node-twitter');
 const fs = require('fs')
+const auth = require('./auth.js')
  
 let twitterStreamClient = new Twitter.StreamClient(
-    'XEjQIeiiXHAZfgwb2110gYFOs',
-    'kaE9WxUKQN3bilZM4G1OZSKHSA2a5Ril835ZAz4YHikbm74eei',
-    '1478253529-CDeEt0xJXBbwu3Ddl61PJY2ZHX7AcjgJvHHmPdT',
-    'uAEmJv59QsEQCcw9QdjUHAKCFo0u6vmtmyx0xS0sblzHE'
+    auth.CONSUMER_KEY,
+    auth.CONSUMER_SECRET,
+    auth.TOKEN,
+    auth.TOKEN_SECRET
 );
 
 let trumpArr = []
