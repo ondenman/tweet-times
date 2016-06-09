@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = {
-	'', 	// CONSUMER KEY
-    '', 	// CONSUMER SECRET
-    '', 	// TOKEN
-    ''		// TOKEN SECRET
+	CONSUMER_KEY: '', 							
+    CONSUMER_SECRET: '',
+    TOKEN: '',
+    TOKEN_SECRET: ''
 }
