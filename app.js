@@ -3,47 +3,66 @@
 const Twitter = require('node-twitter');
 const fs = require('fs')
 const auth = require('./auth.js')
+const terms = require('./terms.js')
  
 let twitterStreamClient = new Twitter.StreamClient(
     auth.CONSUMER_KEY,
     auth.CONSUMER_SECRET,
     auth.TOKEN,
     auth.TOKEN_SECRET
-);
-
-let trumpArr = []
-let clintonArr = []
-let started = Date.now()
+)
  
 twitterStreamClient.on('close', function() {
-    console.log('Connection closed.');
-});
+    console.log('Connection closed.')
+})
+
 twitterStreamClient.on('end', function() {
-    console.log('End of Line.');
-});
+    console.log('End of Line.')
+})
+
 twitterStreamClient.on('error', function(error) {
-    console.log('Error: ' + (error.code ? error.code + ' ' + error.message : error.message));
-});
+    console.log('Error: ' + (error.code ? error.code + ' ' + error.message : error.message))
+})
 
 twitterStreamClient.on('tweet', function(tweet) {
-    let text = tweet.text.toLowerCase()
-    if (text.indexOf('trump') > -1) trumpArr.push(tweet.created_at)
-    if (text.indexOf('clinton') > -1 ) clintonArr.push(tweet.created_at)
-});
+    pushDates(tweet)
+})
 
-function main() {
-    twitterStreamClient.start(['trump','clinton']);
+function pushDates(tweet) {
+    let text = tweet.text.toLowerCase().split(' ')
+    let keys = Object.keys(terms)
+        keys.forEach( key => {
+            if (text.includes(key))
+                terms[key].push(tweet.created_at)
+        })
+}
+
+Array.prototype.includes = function(arg) {
+    let result = this.indexOf(arg) > -1 ? true : false
+    return result
+}
+
+function run() {
+    console.log('Running')
+    console.log('Will terminate at: '+new Date(Date.now()+RUNNING_TIME))
+
+    const runningTime = RUNNING_TIME
+    const started = new Date(Date.now())
+
+    twitterStreamClient.start(terms.searchStrings)
     setTimeout(() => {
         twitterStreamClient.stop()
-        let stopped = Date.now()
+        let stopped = new Date(Date.now())
+
         let obj = {
             started: started,
             stopped: stopped,
-            trump: trumpArr,
-            clinton: clintonArr
+            results: terms
         }
-        fs.writeFileSync('./tweet_times.txt', JSON.stringify(obj, null, 3))
-    }, 5000)
+        fs.writeFileSync(FILE, JSON.stringify(obj, null, 3))
+    }, runningTime)
 }
 
-main()
+const FILE = './tweet_times.txt'
+const RUNNING_TIME = 1000 * 2 // running time in milliseconds
+run()
